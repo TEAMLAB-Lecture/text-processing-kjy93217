@@ -4,7 +4,7 @@
 
 """
 NLP에서 흔히하는 전처리는 소문자 변환, 앞뒤 필요없는 띄어쓰기를 제거하는 등의 텍스트 정규화 (text normalization)입니다. 
-이번 숙제에서는 텍스트 처리 방법을 파이썬으로 배워보겠습니다. 
+이번 숙제에서는 텍스트 처리 방법을 파이썬으로 배워보겠습니다.
 """
 
 
@@ -33,7 +33,53 @@ def normalize(input_string):
              >>> tp.normalize(input_string2)
              'extra space'
     """
-    normalized_string = None
+
+    # 모든 단어는 소문자로 변환 
+    small_string = input_string.lower()
+    
+    # 시퀀스 순방향으로 체크하며 가장 앞 공백 제거 
+    forward_check = []
+    flag = False
+
+    for i in small_string:
+        if i != " ":
+            flag = True
+
+        if flag == True:
+            forward_check.append(i)
+
+    # 입력된 문자가 없으면 공백 문자열 반환
+    if forward_check == []:
+        return ""
+
+    # 시퀀스 역방향으로 체크하며 가장 앞 공백 제거
+    backword_check = []
+    flag = False
+
+    while forward_check:
+        i = forward_check.pop()
+        if i != " ":
+            flag = True
+
+        if flag == True:
+            backword_check.insert(0,i)
+
+    # 문자 중간에 존재하는 연속되는 공백 하나의 공백으로
+    normalized_string = ""
+    pre = True
+
+    for i in backword_check:
+        if i == " " and pre == True:
+            pre = False
+
+        elif i != " " and pre == False:
+            normalized_string += " "
+            normalized_string += i
+            pre = True
+            
+        elif i != " " and pre == True:
+            normalized_string += i
+
     return normalized_string
 
 
@@ -58,5 +104,13 @@ def no_vowels(input_string):
             >>> tp.normalize(input_string2)
             ''W lv Pythn!'
     """
-    no_vowel_string = None
+
+    vowel = ['a','e','i','o','u','A','E','I','O','U']
+    no_vowel_string = ""
+
+    for i in input_string:
+        if i not in vowel:
+            no_vowel_string += i
+
     return no_vowel_string
+
