@@ -33,44 +33,50 @@ def normalize(input_string):
              >>> tp.normalize(input_string2)
              'extra space'
     """
-    lower_string = input_string.lower()
+
+    # 모든 단어는 소문자로 변환 
+    small_string = input_string.lower()
     
-    stack = []
+    # 시퀀스 순방향으로 체크하며 가장 앞 공백 제거 
+    forward_check = []
     flag = False
 
-    for i in lower_string:
+    for i in small_string:
         if i != " ":
             flag = True
 
         if flag == True:
-            stack.append(i)
+            forward_check.append(i)
 
-    if stack == []:
+    # 입력된 문자가 없으면 공백 문자열 반환
+    if forward_check == []:
         return ""
 
-
-    mid_string = []
+    # 시퀀스 역방향으로 체크하며 가장 앞 공백 제거
+    backword_check = []
     flag = False
 
-    while stack:
-        temp = stack.pop()
-        if temp != " ":
+    while forward_check:
+        i = forward_check.pop()
+        if i != " ":
             flag = True
 
         if flag == True:
-            mid_string.insert(0,temp)
+            backword_check.insert(0,i)
 
-
+    # 문자 중간에 존재하는 연속되는 공백 하나의 공백으로
     normalized_string = ""
     pre = True
 
-    for i in mid_string:
+    for i in backword_check:
         if i == " " and pre == True:
             pre = False
+
         elif i != " " and pre == False:
             normalized_string += " "
             normalized_string += i
             pre = True
+            
         elif i != " " and pre == True:
             normalized_string += i
 
